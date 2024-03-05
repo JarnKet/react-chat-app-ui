@@ -1,9 +1,10 @@
 import moment from "moment";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 
 function App() {
   const [chats, setChats] = useState([]);
   const [chatText, setChatText] = useState("");
+  const bottomChatRef = useRef(null);
 
   const handleChatSubmit = () => {
     setChats((prev) => {
@@ -19,6 +20,12 @@ function App() {
 
     setChatText("");
   };
+
+  useEffect(() => {
+    if (bottomChatRef.current) {
+      bottomChatRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [chats]);
 
   const handleKeyPress = (e) => {
     if (e.key === "Enter") {
@@ -56,6 +63,7 @@ function App() {
             </div>
           </div>
         ))}
+        <div ref={bottomChatRef} />
       </section>
       <div className="input-container">
         <input type="text" placeholder="ຂໍ້ຄວາມ..." value={chatText} onChange={(e) => setChatText(e.target.value)} onKeyPress={handleKeyPress} />
